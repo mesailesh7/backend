@@ -1,28 +1,28 @@
-import {connect} from "@/dbConfig/dbConfig.ts";
+import { connect } from "@/dbConfig/dbConfig.ts";
 import User from "@/models/userModel";
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 
 
 connect()
 
 
-export async function POST(request: NextRequest){
-    try{
+export async function POST(request: NextRequest) {
+    try {
         const reqBody = await request.json()
-        const {username,email,password} = reqBody;
+        const { username, email, password } = reqBody;
 
         console.log(reqBody);
 
         //check if user already exists
-        const user = await User.findOne({email})
+        const user = await User.findOne({ email })
 
-        if(user) {
+        if (user) {
             return NextResponse.json({
-                error:"user already exist",
+                error: "user already exist",
             },
                 {
-                    status:400
+                    status: 400
                 })
         }
 
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest){
         const newUser = new User({
             username,
             email,
-            password:hashsedPassword
+            password: hashsedPassword
         })
 
 
@@ -43,13 +43,13 @@ export async function POST(request: NextRequest){
 
         return NextResponse.json({
             message: "User successfully created",
-            success:true,
+            success: true,
             savedUser
         })
 
     }
-    catch(error: any){
-        return NextResponse.json({ error: error.message },{status:500});
+    catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
 
     }
 }
